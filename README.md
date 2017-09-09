@@ -45,19 +45,19 @@ Please follow [official instructions](https://core.telegram.org/bots#6-botfather
 
 ### Install the [php-telegram-bot](https://github.com/php-telegram-bot/core) library and his dependencies
 
-    $ docker exec telegrambot_web-server_1 composer update
+    $ docker-compose exec web-server composer update
 
 ### Create database (use the previously selected root password)
 
-    $ docker exec telegrambot_database-server_1 mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS telegram_bot CHARACTER SET = 'utf8mb4' COLLATE = 'utf8mb4_unicode_520_ci'"
+    $ docker-compose exec database-server mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS telegram_bot CHARACTER SET = 'utf8mb4' COLLATE = 'utf8mb4_unicode_520_ci'"
 
 ### Grant user (use the previously selected root password)
 
-    $ docker exec telegrambot_database-server_1 mysql -u root -proot -e "GRANT ALL PRIVILEGES ON telegram_bot.* to nonrootuser@'%' IDENTIFIED BY 'non-root-password'"
+    $ docker-compose exec database-server mysql -u root -proot -e "GRANT ALL PRIVILEGES ON telegram_bot.* to nonrootuser@'%' IDENTIFIED BY 'non-root-password'"
 
 ### Import database structure (use the previously non-root password and username)
 
-    $ docker exec -it telegrambot_web-server_1 bash
+    $ docker-compose exec web-server bash
 
     $ mysql -u nonrootuser -pnon-root-password -h database-server telegram_bot < ./vendor/longman/telegram-bot/structure.sql
 
@@ -71,7 +71,7 @@ Through Telegram start a new chat with the bot you have created and type /help.
 
 In the web server docker container we have a crontab that will call the bot-cli file (./bot/src/cli.php) every minutes, so our but will reply to us each minute, but if you want to trigger bot execution you can run the following docker command:
 
-    $ sudo docker exec telegrambot_web-server_1 /usr/local/bin/php /var/www/src/cli.php
+    $ docker-compose exec web-server /usr/local/bin/php /var/www/src/cli.php
 
 ### Create your commands
 
